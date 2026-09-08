@@ -2,5 +2,5 @@ from pydantic import BaseModel, StrictStr
 
 
 class User_Delete_Response(BaseModel):
-    code: StrictStr
-    message: StrictStr
+    # Модель пустая, так как ответа нет при 204
+    pass

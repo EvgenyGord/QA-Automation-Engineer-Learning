@@ -69,8 +69,8 @@ class TestAuthorizedV1Account:
         MethodsAuthorized.post_create_user()
 
     @allure.epic('API')
-    @allure.title('Удаление пользователя v1')
-    def test_delete_v1_user(self):
+    @allure.title('Удаление пользователя v1 (DELETE)')
+    def test_delete_user_v1(self):
         """
         Тест для проверки удаления пользователя через DELETE-запрос на эндпоинт /Account/v1/User/{UUID}.
 
@@ -79,23 +79,21 @@ class TestAuthorizedV1Account:
            - Формирует данные для запроса.
            - Отправляет DELETE-запрос на сервер для удаления пользователя.
            - Валидирует ответ сервера, проверяя успешность удаления пользователя.
-
         """
 
         MethodsAuthorized.delete_v1_user()
 
     @allure.epic('API')
-    @allure.title('Удаление пользователя v1')
+    @allure.title('Проверка получения пользователя v1 ДО/ПОСЛЕ удаления')
     def test_get_v1_user(self):
         """
-        Тест для проверки удаления пользователя через GET-запрос на эндпоинт /Account/v1/User/{UUID}.
+        Тест для проверки удаления пользователя через GET-запрос на эндпоинт /Account/v1/User/uid ДО/ПОСЛЕ удаления.
 
         Этот тест выполняет следующие шаги:
         1. Вызывает метод `get_v1_user` из класса `MethodsAuthorized`, который:
            - Формирует данные для запроса.
            - Отправляет GET-запрос на сервер для удаления пользователя.
            - Валидирует ответ сервера, проверяя успешность удаления пользователя.
-
         """
 
         MethodsAuthorized.get_v1_user()

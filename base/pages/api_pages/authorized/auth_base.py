@@ -56,23 +56,23 @@ class AuthBase:
         """
         return f"{self.base_url}/Account/v1/User"
 
-    def get_delete_user_endpoint(self, id):
+    def get_delete_user_endpoint(self, uid):
         """
         Возвращает полный URL для выполнения POST-запроса создания пользователя.
 
         :return: Строка с полным URL для создания пользователя.
         """
 
-        return f"{self.base_url}/Account/v1/User/{id}"
+        return f"{self.base_url}/Account/v1/User/{uid}"
 
-    def get_get_user_endpoint(self, id):
+    def get_user_info_endpoint(self, uid):
         """
-        Возвращает полный URL для выполнения GET-запроса создания пользователя.
+        Возвращает полный URL для выполнения GET-запроса получения информации о пользователе.
 
         :return: Строка с полным URL для создания пользователя.
         """
 
-        return f"{self.base_url}/Account/v1/User/{id}"
+        return f"{self.base_url}/Account/v1/User/{uid}"
 
 
     @allure.step("Формирование данных для запроса")
@@ -102,18 +102,37 @@ class AuthBase:
     @allure.step("Формирование данных для запроса DELETE")
     def form_request_data_delete(self, endpoint):
         """
-        Формирует данные для DELETE-запроса и возвращает их вместе с полным URL.
+        Формирует URL для DELETE-запроса.
+        DELETE-запрос не требует тела.
 
+        :param endpoint: Полный URL, на который будет отправлен запрос.
+        :return: URL для DELETE-запроса.
         """
-        data = {
-            "userName": self.username,
-            "password": self.password
-        }
         url = endpoint
         allure.attach(
-            f"curl -X 'DELETE' '{url}' -H 'accept: application/json'",
-            name="Curl for Postman", attachment_type=allure.attachment_type.TEXT)
-        return data, url
+            f"curl -X 'DELETE' '{url}' -H 'accept: application/json' -H 'Authorization: Bearer <token>'",
+            name="Curl for Postman",
+            attachment_type=allure.attachment_type.TEXT
+        )
+        return url
+
+    @allure.step("Формирование данных для GET-запроса")
+    def form_request_data_get(self, endpoint):
+        """
+        Формирует данные для GET-запроса и возвращает их вместе с полным URL.
+        GET-запрос не требует тела.
+
+        :param endpoint: Полный URL, на который будет отправлен запрос.
+        :return: Кортеж, содержащий данные запроса в формате словаря и полный URL.
+        """
+
+        url = endpoint
+        allure.attach(
+            f"curl -X 'GET' '{url}' -H 'accept: application/json' -H 'Authorization: Bearer <token>'",
+            name="Curl for Postman",
+            attachment_type=allure.attachment_type.TEXT
+        )
+        return url
 
     @allure.step("Отправка POST-запроса")
     def send_post_request(self, data, url):
@@ -132,42 +151,50 @@ class AuthBase:
         """
         response = requests.post(url, headers=self.headers, json=data)
         allure.attach(response.text, name="Ответ сервера", attachment_type=allure.attachment_type.JSON)
-        allure.attach(response.request.body.decode(), name="Сырой запрос", attachment_type=allure.attachment_type.JSON)
+        if response.request.body:
+            try:
+                allure.attach(response.request.body.decode(), name="Сырой запрос",
+                              attachment_type=allure.attachment_type.JSON)
+            except:
+                allure.attach(str(response.request.body), name="Сырой запрос",
+                              attachment_type=allure.attachment_type.TEXT)
+        else:
+            allure.attach("POST запрос без тела", name="Сырой запрос", attachment_type=allure.attachment_type.TEXT)
+
         allure.attach(url, name="URL запроса", attachment_type=allure.attachment_type.TEXT)
         allure.attach(f"Status Code: {response.status_code}", name="Код статуса",
                       attachment_type=allure.attachment_type.TEXT)
         return response
 
     @allure.step("Отправка DELETE-запроса")
-    def send_delete_request(self, data, url):
+    def send_delete_request(self, url, headers):
         """
-        Отправляет DELETE-запрос на указанный URL с предоставленными данными и возвращает ответ сервера.
-
-        :param data: Данные запроса в формате словаря.
-        :param url: Полный URL для отправки DELETE-запроса.
-        :return: Объект ответа от сервера.
-
-        В Allure-отчёт прикрепляется:
-        - Ответ сервера в текстовом формате.
-        - Сырой запрос, отправленный на сервер.
-        - Полный URL запроса.
-        - Код статуса HTTP-ответа.
+        Отправляет DELETE-запрос на указанный URL и возвращает ответ сервера.
+        DELETE-запрос не требует тела.
         """
-        response = requests.delete(url, headers=self.headers, json=data)
+        response = requests.delete(url, headers=headers)
         allure.attach(response.text, name="Ответ сервера", attachment_type=allure.attachment_type.JSON)
-        allure.attach(response.request.body.decode(), name="Сырой запрос", attachment_type=allure.attachment_type.JSON)
+
+        # Проверяем, есть ли тело запроса
+        if response.request.body:
+            allure.attach(response.request.body.decode(), name="Сырой запрос",
+                          attachment_type=allure.attachment_type.JSON)
+        else:
+            allure.attach("Тело запроса отсутствует (DELETE)", name="Сырой запрос",
+                          attachment_type=allure.attachment_type.TEXT)
+
         allure.attach(url, name="URL запроса", attachment_type=allure.attachment_type.TEXT)
         allure.attach(f"Status Code: {response.status_code}", name="Код статуса",
                       attachment_type=allure.attachment_type.TEXT)
         return response
 
     @allure.step("Отправка GET-запроса")
-    def send_get_request(self, data, url):
+    def send_get_request(self, url, headers=None):
         """
         Отправляет GET-запрос на указанный URL с предоставленными данными и возвращает ответ сервера.
 
-        :param data: Данные запроса в формате словаря.
         :param url: Полный URL для отправки GET-запроса.
+        :param headers: Headers для отправки GET-запроса.
         :return: Объект ответа от сервера.
 
         В Allure-отчёт прикрепляется:
@@ -176,9 +203,18 @@ class AuthBase:
         - Полный URL запроса.
         - Код статуса HTTP-ответа.
         """
-        response = requests.get(url, headers=self.headers, json=data)
+        response = requests.get(url, headers=headers)
         allure.attach(response.text, name="Ответ сервера", attachment_type=allure.attachment_type.JSON)
-        allure.attach(response.request.body.decode(), name="Сырой запрос", attachment_type=allure.attachment_type.JSON)
+        if response.request.body:
+            try:
+                allure.attach(response.request.body.decode(), name="Сырой запрос",
+                              attachment_type=allure.attachment_type.JSON)
+            except:
+                allure.attach(str(response.request.body), name="Сырой запрос",
+                              attachment_type=allure.attachment_type.TEXT)
+        else:
+            allure.attach("GET запрос без тела", name="Сырой запрос", attachment_type=allure.attachment_type.TEXT)
+
         allure.attach(url, name="URL запроса", attachment_type=allure.attachment_type.TEXT)
         allure.attach(f"Status Code: {response.status_code}", name="Код статуса",
                       attachment_type=allure.attachment_type.TEXT)
@@ -195,7 +231,7 @@ class AuthBase:
         в консоль выводится сообщение "Успешная авторизация: True". Также добавляется
         запись в Allure-отчёт с деталями успешного ответа.
         """
-        result = AuthorizedResponseSuccess.parse_obj({"value": response.json()})
+        result = AuthorizedResponseSuccess.model_validate({"value": response.json()})
         assert result.value is True, "Ожидался ответ 'true', но получено другое значение"
         print("Успешная авторизация: True")
         allure.attach(f"Ответ успешен: {result.value}", name="Валидация успешного ответа",
@@ -213,7 +249,7 @@ class AuthBase:
         запись в Allure-отчёт с деталями успешного ответа, включая токен, дату истечения,
         статус и результат.
         """
-        result = GenerateTokenResponse.parse_obj(response.json())
+        result = GenerateTokenResponse.model_validate(response.json())
         assert result.status == "Success", f"Ожидался статус 'Success', но получено: {result.status}"
         print(f"Токен успешно сгенерирован: {result.token}")
         allure.attach(
@@ -233,7 +269,7 @@ class AuthBase:
         запись в Allure-отчёт с деталями успешного ответа, включая токен, дату истечения,
         статус и результат.
         """
-        result = User_Response.parse_obj(response.json())
+        result = User_Response.model_validate(response.json())
         assert result.username == self.username, f"Ожидалось имя пользователя {self.username}, но получено: {result.username}"
         print(f"Пользователь с именем: {result.username} успешно создан")
         allure.attach(
@@ -241,27 +277,69 @@ class AuthBase:
             name="Валидация успешного ответа",
             attachment_type=allure.attachment_type.TEXT)
 
-    @allure.step("Валидация успешного ответа удаления пользователя")
-    def validate_delete_user_response(self, response):
-
-        result = User_Delete_Response.parse_obj(response.json())
-        assert result.username == self.username, f"Ожидалось имя пользователя {self.username}, но получено: {result.username}"
-        print(f"Пользователь с именем: {result.username} успешно удален")
-        allure.attach(
-            f"ID пользователя {result.userID}\n Имя пользователя: {result.username}",
-            name="Валидация успешного ответа",
-            attachment_type=allure.attachment_type.TEXT)
+    @allure.step("Валидация ответа DELETE")
+    def validate_delete_response(self, response):
+        """
+        Валидирует ответ сервера для DELETE-запроса.
+        При успешном удалении сервер возвращает 204 No Content.
+        """
+        with allure.step("Проверка статуса DELETE-запроса"):
+            if response.status_code == 204:
+                print(f"Пользователь успешно удален (204 No Content)")
+                allure.attach(
+                    "Успешное удаление (204 No Content)",
+                    name="Результат удаления",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+            else:
+                print(f"Неожиданный статус ответа: {response.status_code}")
+                print(f"Ответ сервера: {response.text}")
+                allure.attach(
+                    response.text,
+                    name="Ответ сервера",
+                    attachment_type=allure.attachment_type.JSON
+                )
+                assert False, f"Ожидался статус 204, получен {response.status_code}"
 
     @allure.step("Валидация успешного ответа получения информации о пользователе")
     def validate_get_user_response(self, response):
 
-        result = User_Get_Response.parse_obj(response.json())
+        result = User_Get_Response.model_validate(response.json())
         assert result.username == self.username, f"Ожидалось имя пользователя {self.username}, но получено: {result.username}"
-        print(f"Пользователь с именем: {result.username} успешно удален")
+        print(f"Пользователь с именем: {result.username} успешно найден")
         allure.attach(
-            f"ID пользователя {result.userID}\n Имя пользователя: {result.username}",
+            f"ID пользователя {result.userId}\n Имя пользователя: {result.username}",
             name="Валидация успешного ответа",
             attachment_type=allure.attachment_type.TEXT)
+
+    @allure.step("Валидация ответа при отсутствии пользователя (401)")
+    def validate_user_not_found_response(self, response):
+        """
+        Валидирует ответ сервера при запросе несуществующего пользователя.
+        Ожидается статус 401 с кодом ошибки "1207" и сообщением "User not found!"
+        """
+        with allure.step("Проверка статуса и сообщения об ошибке"):
+            # Проверяем статус
+            assert response.status_code == 401, \
+                f"Ожидался статус 401, получен {response.status_code}"
+
+            # Парсим ответ
+            response_data = response.json()
+
+            # Проверяем код ошибки
+            assert response_data.get('code') == "1207", \
+                f"Ожидался код ошибки '1207', получен '{response_data.get('code')}'"
+
+            # Проверяем сообщение об ошибке
+            assert response_data.get('message') == "User not found!", \
+                f"Ожидалось сообщение 'User not found!', получено '{response_data.get('message')}'"
+
+            print("Пользователь не найден (401) - Ожидаемый результат")
+            allure.attach(
+                f"Код: {response_data.get('code')}\nСообщение: {response_data.get('message')}",
+                name="Результат проверки",
+                attachment_type=allure.attachment_type.TEXT
+            )
 
     @allure.step("Валидация ошибки")
     def validate_error_response(self, response):
@@ -274,7 +352,7 @@ class AuthBase:
         В случае ошибки выводится сообщение с кодом и текстом ошибки в консоль.
         Также добавляется запись в Allure-отчёт с деталями ошибки.
         """
-        error_response = AuthorizedResponseError.parse_obj(response.json())
+        error_response = AuthorizedResponseError.model_validate(response.json())
         assert error_response.code == 0, "Ожидался код ошибки '0'"
         assert isinstance(error_response.message, str), "Сообщение об ошибке должно быть строкой"
         print(f"Ошибка: Код - {error_response.code}, Сообщение - {error_response.message}")
@@ -288,18 +366,31 @@ class AuthBase:
         :param response: Объект ответа от сервера.
         :param success_validator: Функция для валидации успешного ответа.
 
-        Метод проверяет статус-код ответа. Если статус 200, то вызывается функция success_validator
-        для дальнейшей валидации. Если статус отличается от 200, выводится информация об ошибке в консоль
-        и Allure-отчёт, после чего тест завершается с ошибкой.
+        Поддерживает статусы: 200, 201, 204
         """
         with allure.step("Проверка статуса и валидация ответа"):
-            if response.status_code == 200:
-                success_validator(response)
-                print("Тест успешен: Статус код 200")
+            # Список успешных статусов
+            success_statuses = [200, 201, 204]
+
+            if response.status_code in success_statuses:
+                if response.status_code == 204:
+                    print("Тест успешен: Статус код 204 No Content")
+                    allure.attach(
+                        "Успешный запрос без содержимого",
+                        name="Результат",
+                        attachment_type=allure.attachment_type.TEXT
+                    )
+                elif success_validator:
+                    success_validator(response)
+                    print(f"Тест успешен: Статус код {response.status_code}")
             else:
                 print(f"Неожиданный статус ответа: {response.status_code}")
                 print(f"Ответ сервера: {response.text}")
-                allure.attach(response.text, name="Ответ сервера", attachment_type=allure.attachment_type.JSON)
+                allure.attach(
+                    response.text,
+                    name="Ответ сервера",
+                    attachment_type=allure.attachment_type.JSON
+                )
                 assert False, f"Неожиданный статус ответа: {response.status_code}"
 
     def validate_create_response(self, response, success_validator):
