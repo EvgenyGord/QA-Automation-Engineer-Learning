@@ -1,1 +1,0 @@
-curl -X 'DELETE' 'https://demoqa.com/Account/v1/User/02014503-9980-42f8-86a9-078da12993f3' -H 'accept: application/json' -H 'Authorization: Bearer <token>'

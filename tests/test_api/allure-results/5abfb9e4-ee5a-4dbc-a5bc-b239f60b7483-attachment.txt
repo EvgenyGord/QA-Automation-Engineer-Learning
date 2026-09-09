@@ -1,1 +1,0 @@
-curl -X 'POST' 'https://demoqa.com/Account/v1/Authorized' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{'userName': 'Hello1', 'password': 'Qwerty1234!'}'

@@ -1,4 +1,0 @@
-Токен: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IkhlbGxvMSIsInBhc3N3b3JkIjoiUXdlcnR5MTIzNCEiLCJpYXQiOjE3ODg5MzY4NDV9.CRxzLZ4ue1GRH4MSj5VFf79kraA4uRKZEW2EWAt26Ag
-Истекает: 2026-09-16T06:54:05.080Z
-Статус: Success
-Результат: User authorized successfully.
