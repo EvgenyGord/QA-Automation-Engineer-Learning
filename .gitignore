@@ -39,3 +39,9 @@ venv.bak/
 *.swo
 .DS_Store
 Thumbs.db
+allure-report/
+allure-results
+.pytest_cache
+*.log
+pip-log.txt
+*.egg-info/

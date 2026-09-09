@@ -11,14 +11,16 @@ class Select_Menu:
 
     def _init_locators(self):
         """Локаторы страницы: Форма"""
-        self.select = self.page.locator('//*[@id="react-select-2-placeholder"]/../..')
+        self.select_value = self.page.locator('//*[@id="react-select-2-placeholder"]/../..')
+        self.select_title = self.page.locator('//*[@id="react-select-3-placeholder"]/../..')
+        self.select_xxx = self.page.locator('//*[@id="react-select-4-placeholder"]/../..')
         self.select_value_choice=Button(self.page, locator='//*[@id="react-select-2-option-0-0"]', name="Выбор значения select value")
         self.select_one_choice=Button(self.page, locator='//*[@id="react-select-3-option-0-0"]', name="Выбор значения select one")
         self.select_old=Button(self.page, locator='//*[@id="oldSelectMenu"]', name="Нажатие на селектор Old Style Select Menu")
         self.select_old_choice=self.page.locator('//*[@id="oldSelectMenu"]')
         self.select_multi_choice = Button(self.page, locator='//*[@id="react-select-4-option-1"]', name="Выбор значения 'blue' Multiselect drop down")
         self.select_cars_choice = self.page.locator('//*[@id="cars"]')
-        self.select_multi_close = self.page.locator('//*[@class=" css-1wy0on6"]')
+        self.select_multi_close = self.page.locator('//*[@id="react-select-4-input"]/../..')
 
 
 
