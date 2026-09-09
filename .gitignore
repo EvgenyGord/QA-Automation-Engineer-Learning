@@ -8,6 +8,9 @@
 ./allureress
 /allureress/
 /allure-results
+/allure-results/
+./allure-results/
+/.allure-results/
 /idea
 /pytest_cache/
 /.allureress

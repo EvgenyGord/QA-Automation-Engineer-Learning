@@ -11,13 +11,13 @@ class CheckboxPage:
 
     def _init_locators(self):
         """Локаторы страницы: Форма"""
-        self.home = Button(self.page, locator='//*[@class="rct-icon rct-icon-uncheck"]', name='Чек-бокс выбора всей папки')
-        self.plus = Button(self.page, locator='//*[@class="rct-icon rct-icon-expand-all"]', name='Кнопка разворачивания всей папки, просмотр всех чек-боксов')
+        self.home = Button(self.page, locator='//*[@aria-label="Select Home"]', name='Чек-бокс выбора всей папки')
+        self.plus = Button(self.page, locator='//*[@class="rc-tree-switcher rc-tree-switcher_close"]', name='Кнопка разворачивания всей папки, просмотр всех чек-боксов')
 
     def _init_wait_locators(self):
         """Локаторы ожидания"""
-        self.Wait_home = '//*[@class="rct-icon rct-icon-uncheck"]'
-        self.Wait_plus = '//*[@class="rct-icon rct-icon-expand-all"]'
+        self.Wait_home = '//*[@aria-label="Select Home"]'
+        self.Wait_plus = '//*[@class="rc-tree-switcher rc-tree-switcher_close"]'
 
     def _init_input_data(self):
         """Передаваемые параметры для заполнения"""

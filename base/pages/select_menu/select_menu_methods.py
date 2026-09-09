@@ -17,11 +17,14 @@ class Select_Menu_Methods:
             Wait.set_page(select_menu.page)
             with allure.step("Нажатие на селектор Select Value"):
                 Wait.visible(select_menu.Wait_select_value)
-                select_menu.select.nth(0).click()
+                select_menu.select.click()
 
         except AssertionError as e:
             Select_Menu_Methods._handle_error(errors, e)
 
+"""
+Доработать от сюда
+"""
     @staticmethod
     def click_select_one(select_menu: Select_Menu):
         errors = []
@@ -29,7 +32,7 @@ class Select_Menu_Methods:
             Wait.set_page(select_menu.page)
             with allure.step("Нажатие на селектор Select One"):
                 Wait.visible(select_menu.Wait_select_title)
-                select_menu.select.nth(1).click()
+                select_menu..click()
 
         except AssertionError as e:
             Select_Menu_Methods._handle_error(errors, e)

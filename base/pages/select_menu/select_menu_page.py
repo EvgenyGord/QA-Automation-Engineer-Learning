@@ -11,7 +11,7 @@ class Select_Menu:
 
     def _init_locators(self):
         """Локаторы страницы: Форма"""
-        self.select=self.page.locator('//*[@class=" css-1hwfws3"]')
+        self.select = self.page.locator('//*[@id="react-select-2-placeholder"]/../..')
         self.select_value_choice=Button(self.page, locator='//*[@id="react-select-2-option-0-0"]', name="Выбор значения select value")
         self.select_one_choice=Button(self.page, locator='//*[@id="react-select-3-option-0-0"]', name="Выбор значения select one")
         self.select_old=Button(self.page, locator='//*[@id="oldSelectMenu"]', name="Нажатие на селектор Old Style Select Menu")
@@ -26,9 +26,9 @@ class Select_Menu:
 
     def _init_wait_locators(self):
         """Локаторы ожидания"""
-        self.Wait_select_value = '(//*[@class=" css-1hwfws3"])[1]'
-        self.Wait_select_title = '(//*[@class=" css-1hwfws3"])[2]'
-        self.Wait_select_xxx = '(//*[@class=" css-1hwfws3"])[3]'
+        self.Wait_select_value = '//*[@id="react-select-2-placeholder"]'
+        self.Wait_select_title = '//div[@id="react-select-3-placeholder"]'
+        self.Wait_select_xxx = '//div[@id="react-select-4-placeholder"]'
 
 
 
