@@ -30,9 +30,9 @@ class PracticeFormPage:
         self.hobbies_music = Button(self.page, locator='//*[@id="hobbies-checkbox-3"]/..', name='Выбор хобби -> музыка')
         self.current_address = Input(self.page, locator='//*[@id="currentAddress"]', name='Адрес')
         self.load_files_pictures = Input(self.page, locator='//*[@id="uploadPicture"]', name='Загрузка файлов изображений')
-        self.state = Button(self.page, locator='//*[@id="stateCity-wrapper"]//div[contains(text(), "Select State")]', name='Государство')
+        self.state = Button(self.page, locator='//div[text()="Select State"]/..', name='Государство')
         self.state_choice = Button(self.page, locator='//*[@id="react-select-3-option-0"]', name='Выбор государства')
-        self.city = Button(self.page, locator='//*[@id="stateCity-wrapper"]//div[contains(text(), "Select City")]', name='Город')
+        self.city = Button(self.page, locator='//div[text()="Select City"]/..', name='Город')
         self.city_choice = Button(self.page, locator='//*[@id="react-select-4-option-0"]', name='Выбор города')
         self.submit_button = Button(self.page, locator='//*[@id="submit"]', name='Кнопка Submit')
 
@@ -57,9 +57,9 @@ class PracticeFormPage:
         self.Wait_hobbies_music = '//*[@id="hobbies-checkbox-3"]'
         self.Wait_load_files_pictures = '//*[@id="uploadPicture"]'
         self.Wait_current_address = '//*[@id="currentAddress"]'
-        self.Wait_state = '//*[@id="stateCity-wrapper"]//div[contains(text(), "Select State")]'
+        self.Wait_state = '//div[text()="Select State"]/..'
         self.Wait_state_choice = '//*[@id="react-select-3-option-0"]'
-        self.Wait_city = '//*[@id="stateCity-wrapper"]//div[contains(text(), "Select City")]'
+        self.Wait_city = '//div[text()="Select City"]/..'
         self.Wait_city_choice = '//*[@id="react-select-4-option-0"]'
         self.Wait_button_submit = '//*[@id="submit"]'
 
