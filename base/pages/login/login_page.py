@@ -23,6 +23,7 @@ class Login:
         self.Wait_login = '//*[@id="userName"]'
         self.Wait_btn_login = '//*[@id="login"]'
         self.Wait_password = '//*[@id="password"]'
+        self.Wait_auth_books = '//*[@id="userName-label" and text()="Books : "]'
 
 
 
