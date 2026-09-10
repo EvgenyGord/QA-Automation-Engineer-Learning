@@ -41,8 +41,7 @@ class LoginMethods:
             Wait.set_page(login.page)
             with allure.step("Нажатие на кнопку 'Login'"):
                 login.btn_login.click()
-                Wait.visible(login.Wait_auth_books, Wait.W15s)
-
+                Wait.visible(login.Wait_auth_buttons)
 
         except AssertionError as e:
             LoginMethods._handle_error(errors, e)
