@@ -11,6 +11,10 @@
 /allure-results/
 ./allure-results/
 /.allure-results/
+allure-results/
+allure-report/
+/allure-report/
+/allure-report
 /idea
 /pytest_cache/
 /.allureress
