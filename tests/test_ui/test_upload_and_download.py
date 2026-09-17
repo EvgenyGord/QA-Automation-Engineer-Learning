@@ -11,5 +11,5 @@ class TestPractice:
     @allure.epic("Тесты потока 1")
     @allure.feature("Upload and Download")
     @allure.title("Отправка и загрузка")
-    def test_checkbox(self, page: Page, upload_and_download: Upload_and_Download_Page):
+    def test_upload_and_download(self, page: Page, upload_and_download: Upload_and_Download_Page):
         Upload_and_Download_Start.upload_and_download(page, upload_and_download)
