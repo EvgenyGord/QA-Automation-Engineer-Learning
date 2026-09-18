@@ -1,5 +1,16 @@
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+API_USERNAME = os.getenv("API_USERNAME")
+API_PASSWORD = os.getenv("API_PASSWORD")
+
+if not API_USERNAME or not API_PASSWORD:
+    raise RuntimeError(
+        "API_USERNAME and API_PASSWORD must be set in .env"
+    )
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 

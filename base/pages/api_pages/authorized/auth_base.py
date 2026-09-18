@@ -149,13 +149,13 @@ class AuthBase:
         - Полный URL запроса.
         - Код статуса HTTP-ответа.
         """
-        response = requests.post(url, headers=self.headers, json=data)
+        response = requests.post(url, headers=self.headers, json=data, timeout=10)
         allure.attach(response.text, name="Ответ сервера", attachment_type=allure.attachment_type.JSON)
         if response.request.body:
             try:
                 allure.attach(response.request.body.decode(), name="Сырой запрос",
                               attachment_type=allure.attachment_type.JSON)
-            except:
+            except UnicodeDecodeError:
                 allure.attach(str(response.request.body), name="Сырой запрос",
                               attachment_type=allure.attachment_type.TEXT)
         else:
@@ -172,7 +172,7 @@ class AuthBase:
         Отправляет DELETE-запрос на указанный URL и возвращает ответ сервера.
         DELETE-запрос не требует тела.
         """
-        response = requests.delete(url, headers=headers)
+        response = requests.delete(url, headers=headers, timeout=10)
         allure.attach(response.text, name="Ответ сервера", attachment_type=allure.attachment_type.JSON)
 
         # Проверяем, есть ли тело запроса
@@ -203,13 +203,13 @@ class AuthBase:
         - Полный URL запроса.
         - Код статуса HTTP-ответа.
         """
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=10)
         allure.attach(response.text, name="Ответ сервера", attachment_type=allure.attachment_type.JSON)
         if response.request.body:
             try:
                 allure.attach(response.request.body.decode(), name="Сырой запрос",
                               attachment_type=allure.attachment_type.JSON)
-            except:
+            except UnicodeDecodeError:
                 allure.attach(str(response.request.body), name="Сырой запрос",
                               attachment_type=allure.attachment_type.TEXT)
         else:

@@ -16,7 +16,7 @@ class BasePage:
         try:
             page.goto(url, timeout=5000, wait_until='domcontentloaded')
         except TimeoutError:
-            print("Тест дождался пока страница загрузится, продолжился и выполнился")
+            print("Тест дождался пока страница загрузится")
 
 
     class Base:

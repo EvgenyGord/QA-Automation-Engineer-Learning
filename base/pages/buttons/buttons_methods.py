@@ -1,8 +1,8 @@
 import allure
+import pytest
 from playwright.sync_api import Page
 from base.pages.buttons.buttons_page import ButtonsPage
 from src.config.expectations import Wait
-
 class ButtonsMethods:
 
     @staticmethod
@@ -20,6 +20,7 @@ class ButtonsMethods:
 
         except AssertionError as e:
             ButtonsMethods._handle_error(errors, e)
+
 
     @staticmethod
     def button_right_click(buttons: ButtonsPage):

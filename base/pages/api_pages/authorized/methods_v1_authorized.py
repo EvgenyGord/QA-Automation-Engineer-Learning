@@ -1,6 +1,7 @@
 import allure
 from base.pages.api_pages.authorized.auth_base import AuthBase
 import random
+from settings import API_USERNAME, API_PASSWORD
 
 class MethodsAuthorized:
 
@@ -21,7 +22,7 @@ class MethodsAuthorized:
         В случае успешной авторизации, результат валидации добавляется в отчет Allure и выводится в консоль.
         Если авторизация не удалась, тест завершится с ошибкой, и информация об этом также будет включена в отчет Allure.
         """
-        auth_base = AuthBase(username="Hello1", password="Qwerty1234!")
+        auth_base = AuthBase(username=API_USERNAME, password=API_PASSWORD)
 
         with allure.step("Формирование данных и отправка запроса"):
             data, url = auth_base.form_request_data(auth_base.get_authorized_endpoint())
@@ -48,7 +49,7 @@ class MethodsAuthorized:
         включая сгенерированный токен. Если запрос на генерацию токена не удался, тест завершится с ошибкой, и информация
         об этом также будет включена в отчет Allure.
         """
-        auth_base = AuthBase(username="Hello1", password="Qwerty1234!")
+        auth_base = AuthBase(username=API_USERNAME, password=API_PASSWORD)
 
         with allure.step("Формирование данных и отправка запроса"):
             data, url = auth_base.form_request_data(auth_base.get_generate_token_endpoint())

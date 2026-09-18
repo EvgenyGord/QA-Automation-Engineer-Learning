@@ -48,3 +48,6 @@ allure-results
 *.log
 pip-log.txt
 *.egg-info/
+.env
+.env.*
+!.env.example
